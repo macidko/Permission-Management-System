@@ -1,0 +1,11 @@
+.logo {
+    width: 90%;
+    max-width: 350px;
+}
+
+.landing-btn {
+    font-weight: 600;
+    min-width: 60%;
+    max-width: 90%;
+    margin: 0 auto  ;
+}
