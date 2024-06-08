@@ -1,11 +1,15 @@
-import './Home.css';
+import Navigation from "../../components/Navbar/Navigation";
+import "./Home.css";
 
-type Props = {}
+type Props = {};
 
 const Home = (props: Props) => {
   return (
-    <div>Home</div>
-  )
-}
+    <>
+      <Navigation />
+      <div>Home</div>
+    </>
+  );
+};
 
 export default Home;

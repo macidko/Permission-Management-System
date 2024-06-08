@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Landing = () => {
   return (
     <Container fluid className="landing-container">
-      <Row className="justify-content-center align-items-center vh-100">
+      <Row className="flex-column justify-content-center align-items-center vh-100">
         <Col md={3} className="text-center">
           <Image src={Logo} alt="PermissionPro Logo" className="logo" />
         </Col>
@@ -17,12 +17,12 @@ const Landing = () => {
           </p>
           <div className="mt-5 text-center d-flex flex-column">
             <Link to="/register">
-              <Button className="landing-btn mb-3 bg-success text-white">
+              <Button className="landing-btn mb-3 bg-dark text-white">
                 Get Started
               </Button>
             </Link>
             <Link to="/login">
-              <Button className="landing-btn bg-success text-white">
+              <Button className="landing-btn bg-dark text-white">
                 Access
               </Button>
             </Link>
