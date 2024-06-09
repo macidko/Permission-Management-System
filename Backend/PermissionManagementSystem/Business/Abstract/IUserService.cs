@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Business.Features.Users.Dtos;
 using Entities.Concrete;
 
 
@@ -27,16 +28,16 @@ public interface IUserService
     //DeletePermissionByUserId(int userId, string permission);
     //DeletePermissionByUsername(string username, string permission);
 
-    
+
     //3. Yetki Kontrolü:
     //• Sistem, herhangi bir işlem gerçekleştirilmeden önce kullanıcının ilgili yetkiye
     //sahip olup olmadığını kontrol etmelidir.
 
     //Methodların içerisinde kontrol edilecek (Manager??)
 
-    void Add(User user);
-    void Update(User user);
-    void Delete(int id);
-    User GetById(int id);
-    List<User> GetAll();
+    //Task Add(AddUserRequest dto);
+    //void Update(User user);
+    //void Delete(int id);
+    //User GetById(int id);
+    //Task<List<ListUserResponse>> GetAll();
 }

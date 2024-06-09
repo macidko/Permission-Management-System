@@ -1,4 +1,7 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
+using Business.Features.Users.Dtos;
+using Core.CrossCuttingConcerns.Types;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -11,60 +14,53 @@ namespace Business.Concrete;
 
 public class UserManager : IUserService
 {
+    //private readonly IUserRepository _userRepository;
+    //private readonly IMapper _mapper;
 
-    //Temeller
+    //public UserManager(IUserRepository userRepository, IMapper mapper)
+    //{
+    //    _userRepository = userRepository;
+    //    _mapper = mapper;
+    //}
 
-    IUserRepository _userRepository;
+    //public async Task Add(AddUserRequest dto)
+    //{
+    //    if (dto == null)
+    //    {
+    //        throw new BusinessException("Kullanıcı boş olamaz");
+    //    }
 
-    public UserManager(IUserRepository userRepository)
-    {
-        _userRepository = userRepository;
-    }
+    //    User? userWithSameUsername = await _userRepository.GetAsync(u => u.Username == dto.Username);
 
+    //    if (userWithSameUsername is not null)
+    //    {
+    //        throw new System.Exception("Kullanıcı adı alınmış.");
+    //    }
 
-    public void Add(User user)
-    {
-        //Kontrolsüz; _userRepository.Add(user);
+    //    User user = _mapper.Map<User>(dto);
+    //    await _userRepository.AddAsync(user);
+    //}
 
-        //Kontrollü;
-        if(user == null)
-        {
-            throw new Exception("Kullanıcı boş olamaz");
-        }
+    //public async void Delete(int id)
+    //{
+    //    User? userToDelete = await _userRepository.GetAsync(x => x.Id == id);
+    //    throw new NotImplementedException();
+    //}
 
-        _userRepository.Add(user);
-    }
+    //public async Task<List<ListUserResponse>> GetAll()
+    //{
+    //    List<User> users = await _userRepository.GetListAsync();
+    //    List<ListUserResponse> response = _mapper.Map<List<ListUserResponse>>(users);
+    //    return response;
+    //}
 
-    public void Delete(int id)
-    {
-        User userToDelete = _userRepository.GetById(id);
+    //public User GetById(int id)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-        if(userToDelete == null)
-        {
-            throw new Exception("Silinecek kullanıcı bulanamadı");
-        }
-
-        _userRepository.Delete(userToDelete);
-    }
-
-    public List<User> GetAll()
-    {
-        return _userRepository.GetAll();
-    }
-
-    public User GetById(int id)
-    {
-        return _userRepository.GetById(id);
-    }
-
-    public void Update(User user)
-    {
-        User userToUpdate = _userRepository.GetById(user.Id);
-        if(userToUpdate == null)
-        {
-            throw new Exception("Güncellenecek kullanıcı bulunamadı");
-        }
-
-        _userRepository.Update(userToUpdate);
-    }
+    //public void Update(User user)
+    //{
+    //    throw new NotImplementedException();
+    //}
 }
