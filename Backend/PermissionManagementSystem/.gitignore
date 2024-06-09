@@ -1,0 +1,43 @@
+﻿/Backend/PermissionManagementSystem/.vs
+/Backend/PermissionManagementSystem/bin/
+/Backend/PermissionManagementSystem/obj/
+*.user
+*.suo
+*.cache
+*.vspscc
+*.vsmdi
+*.ldb
+*.bak
+Thumbs.db
+[Tt]est[Ff]ile*
+*.log
+*.vsix
+appsettings.json
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vscode/
+.vscode/**/*
+.vs/
+.vs/**
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+*.sln.ide
+**/*.log
