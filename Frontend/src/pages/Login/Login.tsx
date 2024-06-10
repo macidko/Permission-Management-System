@@ -1,10 +1,10 @@
-import React from "react";
 import { Container, Form, Button, Image } from "react-bootstrap";
 import Logo from "../../assets/pmsLogo3.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import "./Login.css";
+import userService from "../../services/userService";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Geçerli bir email adresi girin").required("Email gerekli"),
@@ -12,6 +12,19 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (values: any) => {
+    try {
+      const result = await userService.login(values);
+      console.log(result);
+      alert("Giriş Başarılı");
+      navigate("/home");
+    } catch (error: any) {
+      alert("Giriş Başarısız");
+    }
+  };
+
   return (
     <Container
       fluid
@@ -21,9 +34,7 @@ const Login = () => {
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
+        onSubmit={handleLogin}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
           <Form id="login-form" className="p-5 rounded" onSubmit={handleSubmit}>
@@ -72,9 +83,7 @@ const Login = () => {
               </Link>
             </Button>
             <Button variant="dark" type="submit" className="float-end">
-              <Link to="/home" className="text-white text-decoration-none">
-                Giriş Yap
-              </Link>
+              Giriş Yap
             </Button>
           </Form>
         )}

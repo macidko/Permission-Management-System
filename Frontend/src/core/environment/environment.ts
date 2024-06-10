@@ -1,0 +1,1 @@
+export const BASE_API_URL = "http://localhost:58663/api/";

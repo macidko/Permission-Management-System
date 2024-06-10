@@ -1,14 +1,15 @@
-import React from "react";
 import "./Register.css";
 import { Container, Form, Button, Image } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/pmsLogo3.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import userService from "../../services/userService";
 
 type Props = {};
 
 const validationSchema = Yup.object().shape({
+  username: Yup.string().required("Kullanıcı Adı gerekli"),
   email: Yup.string()
     .email("Geçerli bir email adresi girin")
     .required("Email gerekli"),
@@ -19,6 +20,18 @@ const validationSchema = Yup.object().shape({
 });
 
 const Register = (props: Props) => {
+  const navigate = useNavigate();
+
+  const handleRegister = async (values: any) => {
+    try {
+      await userService.register(values);
+      alert("Kayıt Başarılı");
+      navigate("/login");
+    } catch (error: any) {
+      alert("Kayıt Başarısız.");
+    }
+  };
+
   return (
     <Container
       fluid
@@ -28,10 +41,10 @@ const Register = (props: Props) => {
         &larr;
       </Link>
       <Formik
-        initialValues={{ email: "", password: "", confirmPassword: "" }}
+        initialValues={{ username: "", email: "", password: "", confirmPassword: "" }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          console.log(values);
+          handleRegister(values);
         }}
       >
         {({
@@ -45,12 +58,27 @@ const Register = (props: Props) => {
           <Form
             id="register-form"
             className="p-5 rounded"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit} // Formik handleSubmit'i burada kullanıyoruz
           >
             <Form.Group className="text-center text-white h1">
               <Link to="/">
                 <Image src={Logo} className="formLogo"></Image>
               </Link>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicUsername">
+              <Form.Label>Kullanıcı Adı</Form.Label>
+              <Form.Control
+                type="text"
+                name="username"
+                placeholder="Kullanıcı Adı"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.username} // username değeri burada kullanılıyor
+                isInvalid={touched.username && !!errors.username}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.username}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email Adresi</Form.Label>
