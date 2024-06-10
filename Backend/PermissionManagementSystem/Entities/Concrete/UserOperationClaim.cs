@@ -1,19 +1,11 @@
-﻿using Core.DataAccess;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entities.Concrete;
 
-namespace Entities.Concrete;
-
-public class UserOperationClaim: Entity
+namespace Entities
 {
-    public int Id { get; set; }
+    public class UserOperationClaim : Core.Entities.UserOperationClaim
+    {
+        public virtual OperationClaim OperationClaim { get; set; }
+        public virtual User User { get; set; }
 
-    public int UserId { get; set; }
-    public int OperationClaimId { get; set; }
-    public virtual User User { get; set; }
-    public virtual OperationClaim OperationClaim { get; set; }
-
+    }
 }

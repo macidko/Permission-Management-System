@@ -16,7 +16,8 @@ public static class DataAccessServiceRegistration
     {
         services.AddScoped<IUserRepository, EfUserRepository>();
         services.AddScoped<IOperationClaimRepository, EfOperationClaimRepository>();
-        services.AddDbContext<PermissionManagementContext>();
+        services.AddScoped<IUserOperationClaimRepository, EfUserOperationClaimRepository>();
+        services.AddDbContext<BaseDbContext>();
         return services;
     }
 }

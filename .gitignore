@@ -1,17 +1,6 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/Backend/PermissionManagementSystem/.vs
-
-_ReSharper.*
-
-[Tt]est[Rr]esult*/
-
-*.nuget.*
-*.nupkg/
-*.paket/
-
+﻿/Backend/PermissionManagementSystem/.vs
+/Backend/PermissionManagementSystem/bin/
+/Backend/PermissionManagementSystem/obj/
 *.user
 *.suo
 *.cache
@@ -19,9 +8,36 @@ _ReSharper.*
 *.vsmdi
 *.ldb
 *.bak
-
 Thumbs.db
 [Tt]est[Ff]ile*
 *.log
 *.vsix
-ppsettings.json
+appsettings.json
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vscode/
+.vscode/**/*
+.vs/
+.vs/**
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+*.sln.ide
+**/*.log

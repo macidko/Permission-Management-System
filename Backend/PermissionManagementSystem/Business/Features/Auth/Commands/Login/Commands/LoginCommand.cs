@@ -1,43 +1,59 @@
 ﻿using Core.CrossCuttingConcerns.Types;
 using Core.Utilities.Hashing;
+using Core.Utilities.JWT;
 using DataAccess.Abstract;
+using Entities;
 using Entities.Concrete;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Features.Auth.Commands.Login.Commands;
-
-public class LoginCommand : IRequest
+namespace Business.Features.Auth.Commands.Login
 {
-    public string Email { get; set; }
-    public string Password { get; set; }
-
-    public class LoginCommandHandler : IRequestHandler<LoginCommand>
+    public class LoginCommand : IRequest<AccessToken>
     {
-        IUserRepository _userRepository;
-        public LoginCommandHandler(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
+        public string Email { get; set; }
+        public string Password { get; set; }
 
-        public async Task Handle(LoginCommand request, CancellationToken cancellationToken)
+        public class LoginCommandHandler : IRequestHandler<LoginCommand, AccessToken>
         {
-            User? user = await _userRepository.GetAsync(u => u.Email == request.Email);
+            private readonly IUserRepository _userRepository;
+            private readonly ITokenHelper _tokenHelper;
+            private readonly IUserOperationClaimRepository _userOperationClaimRepository;
 
-            if (user is null)
+            public LoginCommandHandler(IUserRepository userRepository, ITokenHelper tokenHelper, IUserOperationClaimRepository userOperationClaimRepository)
             {
-                throw new BusinessException("Giriş Başarısız");
+                _userRepository = userRepository;
+                _tokenHelper = tokenHelper;
+                _userOperationClaimRepository = userOperationClaimRepository;
             }
 
-            bool isPasswordMatch = HashingHelper.VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt);
-
-            if (!isPasswordMatch)
+            public async Task<AccessToken> Handle(LoginCommand request, CancellationToken cancellationToken)
             {
-                throw new BusinessException("Giriş Başarısız.");
+                User? user = await _userRepository.GetAsync(
+                    i => i.Email == request.Email);
+
+                if (user is null)
+                {
+                    throw new BusinessException("Giriş başarısız.");
+                }
+
+                bool isPasswordMatch = HashingHelper.VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt);
+
+                if (!isPasswordMatch)
+                    throw new BusinessException("Giriş başarısız.");
+
+                // Kullanıcı rollerini sorgula.
+                List<UserOperationClaim> userOperationClaims = await _userOperationClaimRepository
+                    .GetListAsync(i => i.UserId == user.Id, include: i => i.Include(i => i.OperationClaim));
+
+
+                return _tokenHelper.CreateToken(user, userOperationClaims.Select(i => (Core.Entities.OperationClaim)i.OperationClaim).ToList());
             }
         }
     }

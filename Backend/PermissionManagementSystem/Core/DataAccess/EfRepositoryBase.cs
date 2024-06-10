@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,7 @@ public class EfRepositoryBase<TEntity, TContext> : IRepository<TEntity>, IAsyncR
     where TContext : DbContext
     where TEntity : Entity
 {
-    //TContext instance
-    //Yalnızca constructor ile atanabilmesi ve ardından değiştirilememsi için readonly
     private readonly TContext Context;
-
-    //TContext instance ataması için constructor
     public EfRepositoryBase(TContext context)
     {
         Context = context;
@@ -40,42 +37,6 @@ public class EfRepositoryBase<TEntity, TContext> : IRepository<TEntity>, IAsyncR
         Context.Remove(entity);
         Context.SaveChanges();
     }
-    public List<TEntity> GetList(Expression<Func<TEntity, bool>>? predicate = null)
-    {
-        IQueryable<TEntity> data = Context.Set<TEntity>();
-
-        if (predicate != null)
-        {
-            data = data.Where(predicate);
-        }
-
-        return data.ToList();
-    }
-    public TEntity? Get(Expression<Func<TEntity, bool>> predicate)
-    {
-        IQueryable<TEntity> data = Context.Set<TEntity>();
-
-        return data.FirstOrDefault(predicate);
-    }
-
-    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate)
-    {
-        IQueryable<TEntity> data = Context.Set<TEntity>();
-        return await data.FirstOrDefaultAsync(predicate);
-    }
-
-    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? predicate)
-    {
-        IQueryable<TEntity> data = Context.Set<TEntity>();
-
-        if(predicate is not null)
-        {
-            data = data.Where(predicate);
-        }
-
-        return await data.ToListAsync();
-    }
-
     public async Task AddAsync(TEntity entity)
     {
         await Context.AddAsync(entity);
@@ -93,5 +54,54 @@ public class EfRepositoryBase<TEntity, TContext> : IRepository<TEntity>, IAsyncR
         Context.Remove(entity);
         await Context.SaveChangesAsync();
     }
+
+
+    public List<TEntity> GetList(Expression<Func<TEntity, bool>>? predicate = null,
+                                  Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+    {
+        IQueryable<TEntity> data = Context.Set<TEntity>();
+
+        if (predicate != null)
+            data = data.Where(predicate);
+        if (include != null)
+            data = include(data);
+
+        return data.ToList();
+    }
+
+    public TEntity? Get(Expression<Func<TEntity, bool>> predicate,
+                          Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+    {
+        IQueryable<TEntity> data = Context.Set<TEntity>();
+
+        if (include != null)
+            data = include(data);
+
+        return data.FirstOrDefault(predicate);
+    }
+
+    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate,
+                                         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+    {
+        IQueryable<TEntity> data = Context.Set<TEntity>();
+
+        if (include != null)
+            data = include(data);
+
+        return await data.FirstOrDefaultAsync(predicate);
+    }
+
+    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+    {
+        IQueryable<TEntity> data = Context.Set<TEntity>();
+
+        if (predicate != null)
+            data = data.Where(predicate);
+        if (include != null)
+            data = include(data);
+
+        return await data.ToListAsync();
+    }
+
 }
 

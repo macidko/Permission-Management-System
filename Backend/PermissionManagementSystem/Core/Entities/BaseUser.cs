@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Entities;
 
-public class User : Entity
+public class BaseUser : Entity
 {
     public string Username { get; set; }
     public string Email { get; set; }
